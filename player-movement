@@ -2,15 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ConsolePrint : MonoBehaviour {
+public class GoHomeGame : MonoBehaviour {
 
     public Vector2 playerLocation;
     public Vector2 homeLocation;
     public Vector2 pathToHome;
+    bool gameIsOver = false;
 
 	// Use this for initialization
 	void Start () {
-       
+
         print("I always wondered what it was like out there...");
 		print("On the other side of that invisible barrier");
 		print("It is pretty great out here.");
@@ -18,19 +19,24 @@ public class ConsolePrint : MonoBehaviour {
 		print("It is getting dark and cold now");
 		print("But I wandered so far that I'm not sure of my way back");
 		print("The sooner I get home, the sooner I can take a cat nap");
-
-    }
-	  
-	// Update is called once per frame
-	void Update () {
-
-        UpdateMovement(KeyCode.LeftArrow, new Vector2(-1, 0));
-        UpdateMovement(KeyCode.RightArrow, new Vector2(1, 0));
-        UpdateMovement(KeyCode.UpArrow, new Vector2(0, 1));
-        UpdateMovement(KeyCode.DownArrow, new Vector2(0, -1)); 
+        playerLocation = new Vector2(Random.Range(-40.0f, 40.0f), Random.Range(-40.0f, 40.0f));
+        print("Player Location"+playerLocation);
     }
 
-    void UpdateMovement(KeyCode button, Vector2 movementVector)
+
+    // Update is called once per frame
+    void Update () {
+
+        if (!gameIsOver)
+        {
+            UpdateMovement(KeyCode.LeftArrow, new Vector2(-1, 0));
+            UpdateMovement(KeyCode.RightArrow, new Vector2(1, 0));
+            UpdateMovement(KeyCode.UpArrow, new Vector2(0, 1));
+            UpdateMovement(KeyCode.DownArrow, new Vector2(0, -1));
+        }
+    }
+
+     void UpdateMovement(KeyCode button, Vector2 movementVector)
     {
         if (Input.GetKeyDown(button))
         {
@@ -40,13 +46,14 @@ public class ConsolePrint : MonoBehaviour {
         }
     }
 
-    private void PrintDistanceToHome()
+    void PrintDistanceToHome()
     {
         Vector2 pathToHome = homeLocation - playerLocation;
         print("Distance to home: " + pathToHome.magnitude);
         if (playerLocation == homeLocation)
         {
-            print("That's my home right there!");
+            print("You are home!");
+            gameIsOver = true;
         }
     }
 }
